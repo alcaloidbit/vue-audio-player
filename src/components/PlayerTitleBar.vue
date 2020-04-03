@@ -4,10 +4,9 @@
       offset-y
       transition="slide-y-transition"
     >
-      <!-- "activator" is a named slot, we use v-slot directive, and we provide the name of the slot as v-slot argument -->
-      <template v-slot:activator="{on}">
-        <!-- now everything inside the template elements will be passed to the corresponding slots. Any content not wrapped in a <template> using v-slot is assumed to be for the default slot. -->
+      <template v-slot:activator="{ on }">
         <v-btn
+          slot="activator"
           text
           small
           right
@@ -17,7 +16,7 @@
         </v-btn>
       </template>
       <v-list>
-        <v-list-item @click="dialog = true">
+        <v-list-item @click.stop="dialog = true">
           <v-list-item-title>About</v-list-item-title>
         </v-list-item>
         <v-dialog
@@ -30,8 +29,8 @@
             <v-card-actions>
               <v-spacer />
               <v-btn
-                flat
-                @click="dialog = false"
+                text
+                @click.stop="dialog = false"
               >
                 OK
               </v-btn>
