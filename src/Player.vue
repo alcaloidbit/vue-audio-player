@@ -34,10 +34,9 @@
     </v-app-bar>
 
     <v-content>
-      <v-container
-        fluid
-      >
+      <v-container fluid>
         <player-title-bar />
+        <player-playlist-panel :playlist="playlist" />
       </v-container>
     </v-content>
 
@@ -49,15 +48,40 @@
 
 <script>
 import PlayerTitleBar from './components/PlayerTitleBar.vue'
+import PlayerPlaylistPanel from './components/PlayerPlaylistPanel.vue'
 export default {
   components: {
-    PlayerTitleBar
+    PlayerTitleBar,
+    PlayerPlaylistPanel
   },
   data: () => ({
-    drawer: null
+    drawer: null,
+    playlist: [
+      { title: 'Piste Bleue', artist: 'Para One', howl: null, display: true },
+      { title: 'Turtle Trouble', artist: 'Para One', howl: null, display: true },
+      { title: 'Midnight Swim', artist: 'Para One', howl: null, display: true },
+      { title: 'F.U.D.G.E', artist: 'Para One', howl: null, display: true },
+      { title: 'Dudun-dun', artist: 'Para One', howl: null, display: true },
+      { title: 'Musclor (Feat TTC)', artist: 'Para One', howl: null, display: true },
+      { title: 'Def Tea Machine', artist: 'Para One', howl: null, display: true },
+      { title: 'Les soleils artificiels', artist: 'Para One', howl: null, display: true },
+      { title: 'Sages-femmes', artist: 'Para One', howl: null, display: true },
+      { title: 'Liege', artist: 'Para One', howl: null, display: true },
+      { title: 'Clubhoppn', artist: 'Para One', howl: null, display: true },
+      { title: 'Nobody Cares', artist: 'Para One', howl: null, display: true },
+      { title: 'Bobble', artist: 'Para One', howl: null, display: true },
+      { title: 'Ski Lesson Blues', artist: 'Para One', howl: null, display: true }
+    ]
   }),
   created () {
     this.$vuetify.theme.dark = true
+    this.playlist.forEach((track) => {
+      const file = track.title.replace(/\s/g, '_')
+      /* eslint-disable-next-line no-undef */
+      track.howl = new Howl({
+        src: [`./playlist/${file}.mp3`]
+      })
+    })
   }
 }
 </script>
