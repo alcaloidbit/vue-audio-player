@@ -36,6 +36,9 @@
     <v-content>
       <v-container fluid>
         <player-title-bar />
+        <player-info-panel>
+          :trackInfo="getTrackInfo"
+        </player-info-panel>
         <player-controls-bars
           :progress="progress"
           :loop="loop"
@@ -67,11 +70,14 @@
 import PlayerTitleBar from './components/PlayerTitleBar.vue'
 import PlayerPlaylistPanel from './components/PlayerPlaylistPanel.vue'
 import PlayerControlsBars from './components/PlayerControlsBars.vue'
+import PlayerInfoPanel from './components/PlayerInfoPanel.vue'
+
 export default {
   components: {
     PlayerTitleBar,
     PlayerPlaylistPanel,
-    PlayerControlsBars
+    PlayerControlsBars,
+    PlayerInfoPanel
   },
   data: () => ({
     drawer: null,
@@ -105,6 +111,18 @@ export default {
     progress () {
       if (this.currentTrack.howl.duration() === 0) return 0
       return this.seek / this.currentTrack.howl.duration()
+    },
+    getTrackInfo () {
+      const artist = this.currentTrack.artist
+      const title = this.currentTrack.title
+      const seek = this.seek
+      const duration = this.currentTrack.howl.duration()
+      return {
+        artist,
+        title,
+        seek,
+        duration
+      }
     }
   },
   watch: {
