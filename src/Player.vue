@@ -37,6 +37,13 @@
       <v-container fluid>
         <player-title-bar />
         <player-controls-bars
+          :progress="progress"
+          :loop="loop"
+          :shuffle="shuffle"
+          @updateseek="setSeek"
+          @skiptrack="skip"
+          @toggleloop="toggleLoop"
+          @toggleshuffle="toggleShuffle"
           @playtrack="play"
           @pausetrack="pause"
           @stoptrack="stop"
@@ -45,7 +52,7 @@
         <player-playlist-panel
           :selected-track="selectedTrack"
           :playlist="playlist"
-          @selecttrack="selectTrack"
+          @nextselecttrack="selectTrack"
         />
       </v-container>
     </v-content>
@@ -68,9 +75,6 @@ export default {
   },
   data: () => ({
     drawer: null,
-    index: 0,
-    // selectedTrack data property
-    selectedTrack: null,
     playlist: [
       { title: 'Piste Bleue', artist: 'Para One', howl: null, display: true },
       { title: 'Turtle Trouble', artist: 'Para One', howl: null, display: true },
@@ -86,11 +90,34 @@ export default {
       { title: 'Nobody Cares', artist: 'Para One', howl: null, display: true },
       { title: 'Bobble', artist: 'Para One', howl: null, display: true },
       { title: 'Ski Lesson Blues', artist: 'Para One', howl: null, display: true }
-    ]
+    ],
+    // selectedTrack data property
+    selectedTrack: null,
+    index: 0,
+    loop: false,
+    shuffle: false,
+    seek: 0
   }),
   computed: {
     currentTrack () {
       return this.playlist[this.index]
+    },
+    progress () {
+      if (this.currentTrack.howl.duration() === 0) return 0
+      return this.seek / this.currentTrack.howl.duration()
+    }
+  },
+  watch: {
+    playing (playing) {
+      this.seek = this.currentTrack.howl.seek()
+      let updateSeek
+      if (playing) {
+        updateSeek = setInterval(() => {
+          this.seek = this.currentTrack.howl.seek()
+        }, 250)
+      } else {
+        clearInterval(updateSeek)
+      }
     }
   },
   created () {
@@ -99,13 +126,55 @@ export default {
       const file = track.title.replace(/\s/g, '_')
       /* eslint-disable-next-line no-undef */
       track.howl = new Howl({
-        src: [`./playlist/${file}.mp3`]
+        src: [`./playlist/${file}.mp3`],
+        onend: () => {
+          if (this.loop) {
+            this.play(this.index)
+          } else {
+            this.skip('next')
+          }
+        }
       })
     })
   },
   methods: {
     selectTrack (track) {
       this.selectedTrack = track
+    },
+    toggleLoop (value) {
+      this.loop = value
+    },
+    toggleShuffle (value) {
+      this.shuffle = value
+    },
+    skip (direction) {
+      let index = 0
+      const lastIndex = this.playlist.length - 1
+      if (this.shuffle) {
+        index = Math.round(Math.random() * lastIndex)
+        while (index === this.index) {
+          index = Math.round(Math.random() * lastIndex)
+        }
+      } else if (direction === 'next') {
+        index = this.index + 1
+        if (index >= this.playlist.length) {
+          index = 0
+        }
+      } else {
+        index = this.index - 1
+        if (index < 0) {
+          index = this.playlist.length - 1
+        }
+      }
+
+      this.skipTo(index)
+    },
+    skipTo (index) {
+      if (this.currentTrack) {
+        this.currentTrack.howl.stop()
+      }
+
+      this.play(index)
     },
     play (index) {
       const selectedTrackIndex = this.playlist.findIndex(track => track === this.selectedTrack)
@@ -140,6 +209,13 @@ export default {
     stop () {
       this.currentTrack.howl.stop()
       this.playing = false
+    },
+    setSeek (percents) {
+      const track = this.currentTrack.howl
+
+      if (track.playing()) {
+        track.seek((track.duration() / 100) * percents)
+      }
     }
 
   }
