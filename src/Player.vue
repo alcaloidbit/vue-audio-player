@@ -36,7 +36,17 @@
     <v-content>
       <v-container fluid>
         <player-title-bar />
-        <player-playlist-panel :playlist="playlist" />
+        <player-controls-bars
+          @playtrack="play"
+          @pausetrack="pause"
+          @stoptrack="stop"
+        />
+
+        <player-playlist-panel
+          :selected-track="selectedTrack"
+          :playlist="playlist"
+          @selecttrack="selectTrack"
+        />
       </v-container>
     </v-content>
 
@@ -49,13 +59,18 @@
 <script>
 import PlayerTitleBar from './components/PlayerTitleBar.vue'
 import PlayerPlaylistPanel from './components/PlayerPlaylistPanel.vue'
+import PlayerControlsBars from './components/PlayerControlsBars.vue'
 export default {
   components: {
     PlayerTitleBar,
-    PlayerPlaylistPanel
+    PlayerPlaylistPanel,
+    PlayerControlsBars
   },
   data: () => ({
     drawer: null,
+    index: 0,
+    // selectedTrack data property
+    selectedTrack: null,
     playlist: [
       { title: 'Piste Bleue', artist: 'Para One', howl: null, display: true },
       { title: 'Turtle Trouble', artist: 'Para One', howl: null, display: true },
@@ -73,6 +88,11 @@ export default {
       { title: 'Ski Lesson Blues', artist: 'Para One', howl: null, display: true }
     ]
   }),
+  computed: {
+    currentTrack () {
+      return this.playlist[this.index]
+    }
+  },
   created () {
     this.$vuetify.theme.dark = true
     this.playlist.forEach((track) => {
@@ -82,6 +102,46 @@ export default {
         src: [`./playlist/${file}.mp3`]
       })
     })
+  },
+  methods: {
+    selectTrack (track) {
+      this.selectedTrack = track
+    },
+    play (index) {
+      const selectedTrackIndex = this.playlist.findIndex(track => track === this.selectedTrack)
+      if (typeof index === 'number') {
+      /* eslint-disable-next-line no-self-assign */
+        index = index
+      } else if (this.selectedTrack) {
+        if (this.selectedTrack !== this.currentTrack) {
+          this.stop()
+        }
+        index = selectedTrackIndex
+      } else {
+        index = this.index
+      }
+
+      const track = this.playlist[index].howl
+
+      if (track.playing()) {
+        return
+      } else {
+        track.play()
+      }
+
+      this.selectedTrack = this.playlist[index]
+      this.playing = true
+      this.index = index
+    },
+    pause () {
+      this.currentTrack.howl.pause()
+      this.playing = false
+    },
+    stop () {
+      this.currentTrack.howl.stop()
+      this.playing = false
+    }
+
   }
 }
 </script>

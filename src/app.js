@@ -28,7 +28,6 @@ Vue.filter('minutes', (value) => {
   value = min + ':' + sec
   return value
 })
-
 /* eslint-disable-next-line no-new */
 new Vue({
   vuetify,
