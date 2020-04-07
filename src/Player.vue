@@ -36,9 +36,9 @@
     <v-content>
       <v-container fluid>
         <player-title-bar />
-        <player-info-panel>
-          :trackInfo="getTrackInfo"
-        </player-info-panel>
+        <player-info-panel
+          :track-info="getTrackInfo"
+        />
         <player-controls-bars
           :progress="progress"
           :loop="loop"
