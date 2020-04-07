@@ -144,7 +144,7 @@ export default {
       const file = track.title.replace(/\s/g, '_')
       /* eslint-disable-next-line no-undef */
       track.howl = new Howl({
-        src: [`./playlist/${file}.mp3`],
+        src: [`./playlist/${file}.ogg`],
         onend: () => {
           if (this.loop) {
             this.play(this.index)
@@ -210,10 +210,13 @@ export default {
 
       const track = this.playlist[index].howl
 
+      console.log(track)
+
       if (track.playing()) {
         return
       } else {
         track.play()
+        console.log('track ' + track + ' is playing')
       }
 
       this.selectedTrack = this.playlist[index]
