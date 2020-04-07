@@ -55,7 +55,7 @@
         <player-playlist-panel
           :selected-track="selectedTrack"
           :playlist="playlist"
-          @nextselecttrack="selectTrack"
+          @selecttrack="selectTrack"
         />
       </v-container>
     </v-content>
