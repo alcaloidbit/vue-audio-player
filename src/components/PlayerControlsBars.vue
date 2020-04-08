@@ -121,7 +121,7 @@
       <v-progress-linear
         v-model="trackProgress"
         height="40"
-        @click="updateSeek($event)"
+        @change="updateSeek($event)"
       />
     </v-toolbar>
   </div>
@@ -132,7 +132,10 @@ export default {
   props: {
     loop: Boolean,
     shuffle: Boolean,
-    progress: Number
+    progress: {
+      type: Number,
+      required: true
+    }
   },
   data () {
     return {
@@ -177,12 +180,8 @@ export default {
     skipTrack (direction) {
       this.$emit('skiptrack', direction)
     },
-    updateSeek (event) {
-      const el = document.querySelector('.progress-linear__bar')
-      const mousepos = event.offsetX
-      const elWidth = el.clientWidth
-      const percents = (mousepos / elWidth) * 100
-      this.$emit('updateseek', percents)
+    updateSeek (value) {
+      this.$emit('updateseek', value)
     }
   }
 }

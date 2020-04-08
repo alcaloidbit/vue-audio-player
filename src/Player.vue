@@ -100,8 +100,10 @@ export default {
     // selectedTrack data property
     selectedTrack: null,
     index: 0,
+    playing: false,
     loop: false,
     shuffle: false,
+    // A Seek property
     seek: 0
   }),
   computed: {
@@ -126,10 +128,15 @@ export default {
     }
   },
   watch: {
+    // We watch the Player's playing property
+    // updating the seek property 4 times a sec
     playing (playing) {
+      // get the posision of playback for a sound
+      // and assign the value to this.seek
       this.seek = this.currentTrack.howl.seek()
       let updateSeek
       if (playing) {
+        // Do that 4 times / sec
         updateSeek = setInterval(() => {
           this.seek = this.currentTrack.howl.seek()
         }, 250)
@@ -210,13 +217,10 @@ export default {
 
       const track = this.playlist[index].howl
 
-      console.log(track)
-
       if (track.playing()) {
         return
       } else {
         track.play()
-        console.log('track ' + track + ' is playing')
       }
 
       this.selectedTrack = this.playlist[index]
