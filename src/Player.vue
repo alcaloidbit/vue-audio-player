@@ -55,6 +55,7 @@
         <player-playlist-panel
           :selected-track="selectedTrack"
           :playlist="playlist"
+          @playtrack="play"
           @selecttrack="selectTrack"
         />
       </v-container>
@@ -161,6 +162,8 @@ export default {
         }
       })
     })
+    // Maybe
+    this.selectedTrack = this.playlist[0]
   },
   methods: {
     selectTrack (track) {
@@ -242,7 +245,6 @@ export default {
         track.seek((track.duration() / 100) * percents)
       }
     }
-
   }
 }
 </script>
