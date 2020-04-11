@@ -34,7 +34,7 @@
     </v-app-bar>
 
     <v-content>
-      <v-container fluid>
+      <v-container>
         <player-title-bar />
         <player-info-panel
           :track-info="getTrackInfo"
@@ -58,6 +58,7 @@
           @playtrack="play"
           @selecttrack="selectTrack"
         />
+        <player-search-bar :playlist="playlist" />
       </v-container>
     </v-content>
 
@@ -72,13 +73,15 @@ import PlayerTitleBar from './components/PlayerTitleBar.vue'
 import PlayerPlaylistPanel from './components/PlayerPlaylistPanel.vue'
 import PlayerControlsBars from './components/PlayerControlsBars.vue'
 import PlayerInfoPanel from './components/PlayerInfoPanel.vue'
+import PlayerSearchBar from './components/PlayerSearchBar.vue'
 
 export default {
   components: {
     PlayerTitleBar,
     PlayerPlaylistPanel,
     PlayerControlsBars,
-    PlayerInfoPanel
+    PlayerInfoPanel,
+    PlayerSearchBar
   },
   data: () => ({
     drawer: null,

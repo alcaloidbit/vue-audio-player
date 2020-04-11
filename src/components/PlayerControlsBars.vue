@@ -149,7 +149,6 @@ export default {
         return this.progress * 100
       },
       set: function (value) {
-        console.log(value)
         this.$emit('updateseek', value)
       }
     }
@@ -187,6 +186,7 @@ export default {
       this.$emit('skiptrack', direction)
     },
     updateSeek (value) {
+      console.log(value)
       this.$emit('updateseek', value)
     }
   }
