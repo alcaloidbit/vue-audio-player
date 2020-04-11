@@ -130,7 +130,7 @@ export default {
   },
   watch: {
     // We watch the Player's playing property
-    // updating the seek property 4 times a sec
+    // and update the seek property 4 times a sec
     playing (playing) {
       // get the posision of playback for a sound
       // and assign the value to this.seek

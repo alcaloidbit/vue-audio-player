@@ -144,8 +144,14 @@ export default {
     }
   },
   computed: {
-    trackProgress () {
-      return this.progress * 100
+    trackProgress: {
+      get: function () {
+        return this.progress * 100
+      },
+      set: function (value) {
+        console.log(value)
+        this.$emit('updateseek', value)
+      }
     }
   },
   created: function () {
