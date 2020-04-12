@@ -25,7 +25,7 @@ export default {
     }
   },
   methods: {
-    searchPlayList () {
+    searchPlaylist () {
       this.playlist.forEach((track) => {
         if (this.searchString) {
           if (!track.title.toLowerCase().includes(this.searchString.toLowerCase()) && !track.artist.toLowerCase().includes(this.searchString.toLowerCase())) {

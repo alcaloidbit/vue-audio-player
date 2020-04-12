@@ -1,6 +1,5 @@
 <template>
   <v-card
-    height="330"
     :class="playlist"
   >
     <v-list>
